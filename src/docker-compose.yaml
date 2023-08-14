@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  vibbraapi:
+    build:
+      context: .
+      dockerfile: TesteVibbra/Dockerfile
+    environment:
+      - 'ASPNETCORE_ENVIRONMENT=Development'
+      - 'ASPNETCORE_URLS=https://+;http://+'
+      - 'ASPNETCORE_Kestrel__Certificates__Default__Password=password123'
+      - 'ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx'
+      - 'ConnectionStrings:SQLConnection=Server=localhost, 1433;Initial Catalog=Expenses;User ID=sa;Password=@Admin123;'
+    ports:
+      - "5000:80"
+      - "5001:443"  # Adicione esta linha para a porta HTTPS
+    volumes:
+      - '$USERPROFILE\.aspnet\https:/https/'
+    depends_on:
+      - sqlserver
+    networks:
+      - teste-vibbra-api  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: teste-vibbra-sql-server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=@Admin123
+    networks:
+      - teste-vibbra-api
+    ports:
+      - "1433:1433"
+networks:
+  teste-vibbra-api:
+    driver: bridge
