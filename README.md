@@ -60,7 +60,7 @@ mkdir c:/data;
 ## Executing on Docker
 
 <aside>
-💡 Nota: review and configure docker environment variables
+💡 Note: review and configure docker environment variables
 </aside>  
 
 ```bash
